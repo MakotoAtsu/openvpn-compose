@@ -1,0 +1,13 @@
+# Keep secrets and local state out of the image build context.
+data/
+.env
+.git
+.gitignore
+.dockerignore
+*.md
+*.key
+*.crt
+*.csr
+*.srl
+*.pem
+*.ovpn

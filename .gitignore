@@ -1,0 +1,16 @@
+# Runtime state: CA, server/client keys and generated .ovpn profiles.
+# Never commit these.
+/data/
+
+# Local configuration
+.env
+
+# Belt and braces: key material and profiles anywhere in the tree
+*.key
+*.crt
+*.csr
+*.srl
+*.pem
+*.ovpn
+
+.DS_Store
