@@ -1,5 +1,7 @@
 # openvpn-compose
 
+[繁體中文](README.zh-TW.md)
+
 An OpenVPN server you deploy with one command: clone, fill in `.env`, `docker compose up -d`.
 
 It creates its own certificates and one ready-to-import `.ovpn` profile per client. Everything environment-specific (address, port, network, DNS, client names) lives in `.env`, so moving servers, changing IPs, adding devices or replacing a router means editing a setting and running `up` again.
