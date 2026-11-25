@@ -1,0 +1,55 @@
+# OpenVPN server, configured through .env (see .env.example).
+#
+#   docker compose up -d           first run creates the PKI and client profiles
+#   docker compose up -d --build   after pulling changes to this repository
+name: openvpn-compose
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: 10m
+    max-file: "3"
+
+services:
+  # One-shot: creates whatever is missing under ./data (CA, server and client
+  # certificates, client .ovpn profiles) and exits. Safe to run every time.
+  init:
+    build: .
+    image: openvpn-compose:local
+    entrypoint: ["/usr/local/bin/init-pki.sh"]
+    environment:
+      VPN_HOST: ${VPN_HOST:?Set VPN_HOST in .env (see .env.example)}
+      VPN_PORT: ${VPN_PORT:-1194}
+      VPN_CLIENTS: ${VPN_CLIENTS:-vpn-client}
+      VPN_CERT_DAYS: ${VPN_CERT_DAYS:-3650}
+    volumes:
+      - ./data:/data
+    restart: "no"
+    logging: *logging
+
+  openvpn:
+    # Same image as init, built once by init above. Building it from both
+    # services makes a first 'compose up' build the same image twice and hang.
+    image: openvpn-compose:local
+    pull_policy: never
+    depends_on:
+      init:
+        condition: service_completed_successfully
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    sysctls:
+      net.ipv4.ip_forward: "1"
+    environment:
+      VPN_SUBNET: ${VPN_SUBNET:-172.16.88.0/24}
+      VPN_DNS: ${VPN_DNS-1.1.1.1,1.0.0.1}
+      VPN_REDIRECT_GATEWAY: ${VPN_REDIRECT_GATEWAY:-true}
+    ports:
+      # VPN_PORT is the port on the host; the server always uses 1194 inside.
+      - "${VPN_PORT:-1194}:1194/udp"
+    volumes:
+      # Only the server's own material: never the CA key or any client key.
+      - ./data/server:/etc/openvpn/pki:ro
+    logging: *logging
