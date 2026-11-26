@@ -10,7 +10,7 @@ set -eu
 
 . /usr/local/lib/openvpn-compose/lib.sh
 
-VPN_SUBNET=${VPN_SUBNET:-172.16.88.0/24}
+VPN_SUBNET=${VPN_SUBNET:-172.16.80.0/24}
 VPN_DNS=${VPN_DNS-1.1.1.1,1.0.0.1}
 VPN_REDIRECT_GATEWAY=${VPN_REDIRECT_GATEWAY:-true}
 

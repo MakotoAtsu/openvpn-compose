@@ -30,7 +30,7 @@ parse_subnet() {
     _cidr=$1
     case "$_cidr" in
         */*) ;;
-        *) die "VPN_SUBNET must be a CIDR such as 172.16.88.0/24 (got '$_cidr')" ;;
+        *) die "VPN_SUBNET must be a CIDR such as 172.16.80.0/24 (got '$_cidr')" ;;
     esac
     _addr=${_cidr%/*}
     _prefix=${_cidr#*/}

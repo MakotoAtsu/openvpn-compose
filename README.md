@@ -41,7 +41,7 @@ Set these in `.env` (see `.env.example`). Values are plain text, no quotes.
 |---|---|---|
 | `VPN_HOST` | none, required | Address clients connect to: a DNS name or an IP. Written into every profile as the `remote` line. |
 | `VPN_PORT` | `1194` | UDP port published on the host. The server itself always listens on 1194 inside the container. |
-| `VPN_SUBNET` | `172.16.88.0/24` | Private network handed out to connected clients (prefix length 8 to 29). Must not overlap any network on either end of the tunnel: the server's own networks, Docker's networks, the client's LAN. |
+| `VPN_SUBNET` | `172.16.80.0/24` | Private network handed out to connected clients (prefix length 8 to 29). Must not overlap any network on either end of the tunnel: the server's own networks, Docker's networks, the client's LAN. |
 | `VPN_DNS` | `1.1.1.1,1.0.0.1` | DNS servers pushed to clients, comma separated. Empty pushes none. |
 | `VPN_REDIRECT_GATEWAY` | `true` | `true`: clients send all their traffic through the VPN and the server becomes their exit. `false`: only traffic for the VPN network goes through the tunnel and the client's own internet access is unchanged. |
 | `VPN_CLIENTS` | `vpn-client` | One certificate and profile per name, comma separated. Letters, digits, `-` and `_` only. Use one name per device: two devices cannot be connected with the same certificate at once, and the name is what appears in the server log. |
